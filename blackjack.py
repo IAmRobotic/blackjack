@@ -2,10 +2,17 @@ from random import shuffle
 
 keys = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']  # note: does not include Ace!
 values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]  # note: does not include Ace!
+CARD_VALUES = dict(zip(keys, values))
 
 SUITS = ['Hearts', 'Diamonds', 'Spades', 'Clubs']
 VALUES = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
-CARD_VALUES = dict(zip(keys, values))
+
+SUIT_SYMBOLS = {
+    'Spades': u'♠',
+    'Diamonds': u'♦',
+    'Clubs': u'♣',
+    'Hearts': u'♥',
+    }
 
 
 class CommunityCards:
@@ -65,7 +72,7 @@ class Hand:
         cards = ""
         msg = ""
         for card in self._cards:
-            cards += card[0] + " " + card[1] + " "
+            cards += card[0] + SUIT_SYMBOLS[card[1]] + " "
         if self._score > 21:
             msg = "***BUST!***"
         elif self._score == 21:
@@ -97,9 +104,15 @@ class Hand:
         self._score = self.calculate_score()
 
 
-##### Examples of how to use objects ####
+def initial_deal(deck_object, dealer, *players):
+    """
+    Deals two cards to each player, including the dealer
+    """
+    for i in range(2):
+        for player in players:
+            player.draw(deck_object)
+        dealer.draw(deck_object)
 
-deck = CommunityCards(6)   # create a community pile of cards using 6 decks
-bob = Hand()   # create player object for player named Bob
-bob.draw(deck, 2)  # Bob draws two cards
-print(bob)  # prints current hand for Bob and his score
+
+def dealer_move(dealer_hand):
+    pass
